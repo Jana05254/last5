@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>المجتمع</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>المجتمع الطلابي</h1>
+</header>
+<main>
+  <textarea id="postContent" placeholder="اكتب هنا..." rows="5" cols="30"></textarea><br><br>
+  <button id="publishButton">نشر المشاركة</button>
+  <div id="posts"></div>
+</main>
+<footer>
+  <p>© 2025 - مجتمع الجامعة</p>
+</footer>
+
+<script>
+document.getElementById('publishButton').addEventListener('click', async function() {
+    const content = document.getElementById('postContent').value;
+    if (content.trim() !== "") {
+        const formData = new FormData();
+        formData.append('content', content);
+
+        const response = await fetch('../addPost.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        const text = await response.text();
+        if (text === "success") {
+            loadPosts();
+            document.getElementById('postContent').value = "";
+        }
+    }
+});
+
+async function loadPosts() {
+    const response = await fetch('../getPosts.php');
+    const posts = await response.json();
+    const postsDiv = document.getElementById('posts');
+    postsDiv.innerHTML = "";
+    posts.forEach(post => {
+        const div = document.createElement('div');
+        div.textContent = `${post.username}: ${post.content} - ${post.created_at}`;
+        postsDiv.appendChild(div);
+    });
+}
+
+loadPosts();
+</script>
+</body>
+</html>

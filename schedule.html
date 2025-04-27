@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>جدولي الدراسي</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>جدولي الدراسي</h1>
+</header>
+<main>
+  <h2>أضف مادة جديدة</h2>
+  <input type="text" id="courseInput" placeholder="اسم المادة" />
+  <input type="text" id="dayInput" placeholder="اليوم" />
+  <input type="text" id="timeInput" placeholder="الوقت" />
+  <br><br>
+  <button onclick="addCourse()">أضف</button>
+
+  <div id="scheduleList"></div>
+</main>
+<footer>
+  <p>© 2025 - مجتمع الجامعة</p>
+</footer>
+
+<script>
+function addCourse() {
+    const course = document.getElementById('courseInput').value;
+    const day = document.getElementById('dayInput').value;
+    const time = document.getElementById('timeInput').value;
+
+    if (course && day && time) {
+        const formData = new FormData();
+        formData.append('course', course);
+        formData.append('day', day);
+        formData.append('time', time);
+
+        fetch('../addCourse.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(text => {
+            if (text === "success") {
+                loadSchedule();
+                document.getElementById('courseInput').value = "";
+                document.getElementById('dayInput').value = "";
+                document.getElementById('timeInput').value = "";
+            }
+        });
+    }
+}
+
+function loadSchedule() {
+    fetch('../getSchedule.php')
+    .then(response => response.json())
+    .then(schedule => {
+        const list = document.getElementById('scheduleList');
+        list.innerHTML = "";
+        schedule.forEach(item => {
+            const div = document.createElement('div');
+            div.textContent = `${item.course} - ${item.day} - ${item.time}`;
+            list.appendChild(div);
+        });
+    });
+}
+
+loadSchedule();
+</script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>مساعدي الذكي</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>مساعدي الذكي</h1>
+</header>
+<main>
+  <h2>اسأل مساعدك الذكي!</h2>
+  <input type="text" id="questionInput" placeholder="اكتب سؤالك هنا..." />
+  <br><br>
+  <button onclick="answer()">إرسال</button>
+
+  <div id="assistantAnswer"></div>
+</main>
+<footer>
+  <p>© 2025 - مجتمع الجامعة</p>
+</footer>
+
+<script>
+function answer() {
+    const question = document.getElementById('questionInput').value;
+    document.getElementById('assistantAnswer').textContent = "شكرًا لسؤالك! سنجيب قريبًا.";
+}
+</script>
+</body>
+</html>
